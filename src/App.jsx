@@ -22,7 +22,10 @@ function App() {
         )
       }
       <hr />
-      <InfoExpo movies={movies} />
+      <InfoExpo 
+        movies={movies} 
+        setMovies={setMovies}
+      />
     </div>
   )
 }

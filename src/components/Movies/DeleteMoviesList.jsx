@@ -22,6 +22,7 @@ const DeleteMoviesList = ({setMovies}) => {
             <button
                 className='btn btn-danger'
                 type='button'
+                title='Delete all'
                 onClick={clearList}
             >
                 <i className="bi bi-trash2"></i>

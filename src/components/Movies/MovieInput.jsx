@@ -8,13 +8,29 @@ const MovieInput = ({ movies = [], setMovies }) => {
     }
 
     const handleAddMovieButton = () => {
-        setMovies([inputValue, ...movies])
-        setInputValue("")
+        const exists = movies.some((movie) => movie === inputValue);
+        if (!exists) {
+            setMovies([inputValue, ...movies]);
+            setInputValue('');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'The movie already exists in the list!',
+              })
+        }
     }
+
+    const handleKeyUp = (event) => {
+        if (event.key === 'Enter') {
+          handleAddMovieButton()
+        }
+      }
     return (
         <div>
             <input
                 onChange={(e) => handleInputChange(e)}
+                onKeyUp={handleKeyUp}
                 placeholder='Write a movie name'
                 type='text'
                 value={inputValue}

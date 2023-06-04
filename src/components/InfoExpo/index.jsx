@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const InfoExpo = ({ movies = [] }) => {
+const InfoExpo = ({ movies = [], setMovies }) => {
     const [urlList, setUrlList] = useState([])
     const [cardColors, setCardColors] = useState({})
     const bgColorList = ['#40c0cb', '#fcbf49', '#2a9d8f', '#ef476f']
@@ -18,7 +18,17 @@ const InfoExpo = ({ movies = [] }) => {
 
             const apiResponse = await response.json()
             console.log(apiResponse)
-            return apiResponse
+            if (apiResponse.Response === "True") {
+                return apiResponse
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Movie not found!',
+                })
+                const newList = movies.filter((mov) => mov !== movie)
+                setMovies([...newList])
+            }
         }))
 
         let moviesList = []
@@ -43,6 +53,14 @@ const InfoExpo = ({ movies = [] }) => {
         }
     }
 
+    const deleteCard = (index) => {
+        setMovies((prevMovies) => {
+            const newItem = [...prevMovies]
+            newItem.splice(index, 1)
+            return newItem
+        })
+    }
+
     return (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
 
@@ -51,12 +69,16 @@ const InfoExpo = ({ movies = [] }) => {
                 assignColor(index); // Asignar un color para cada card si aún no tiene uno asignado
 
                 const cardStyle = {
-                    width: 16 + 'rem',
+                    width: 18 + 'rem',
                     margin: '10px',
                     backgroundColor: cardColors[index] || ''
                 };
+
                 return (
                     <div className="card" style={cardStyle} key={index}>
+                        <button className="close-button bg-danger text-light" title="Delete" onClick={() => deleteCard(index)}>
+                            X
+                        </button>
                         <img src={url.poster} className="card-img-top" />
                         <div className="card-body">
                             <h2 className="card-title text-light">{url.title}</h2>
